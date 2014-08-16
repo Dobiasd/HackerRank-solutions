@@ -1,0 +1,1 @@
+main = print =<< fmap sum (sequence [readLn, readLn])
