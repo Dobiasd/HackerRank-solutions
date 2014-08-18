@@ -23,7 +23,7 @@ posOfFirstEvenNumInTriangleRowNFast n
 
 posOfFirstEvenNumInTriangleRowN :: Int -> Int
 posOfFirstEvenNumInTriangleRowN n =
-    triangle !! (max 0 (n - 1)) |> findIndex even |> fmap (+1) |> fromMaybe (-1)
+    triangle !! max 0 (n - 1) |> findIndex even |> fmap (+1) |> fromMaybe (-1)
 
 
 triangle :: [[Int]]
