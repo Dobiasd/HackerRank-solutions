@@ -5,7 +5,7 @@ intersectLists :: Eq a => [[a]] -> [a]
 intersectLists = foldl1 intersect
 
 countGems :: String -> Int
-countGems = lines s >>> map sort >>> map nub >>> intersectLists >>> length
+countGems = lines >>> map sort >>> map nub >>> intersectLists >>> length
 
 main = do
   _ <- getLine
