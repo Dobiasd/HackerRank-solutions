@@ -1,8 +1,6 @@
 import Data.List.Split
 import Data.Char
-
-(|>) x y = y x
-infixl 0 |>
+import Control.Arrow
 
 palindromeMoveCnt :: String -> Int
 palindromeMoveCnt s = sum diffs
@@ -13,4 +11,4 @@ palindromeMoveCnt s = sum diffs
 
 main = do
   _ <- getLine
-  interact $ unlines . map (show . palindromeMoveCnt) . lines
+  interact $ lines >>> map (palindromeMoveCnt >>> show) >>> unlines

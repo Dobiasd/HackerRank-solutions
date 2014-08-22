@@ -1,5 +1,6 @@
 import Data.List
 import Data.List.Split
+import Control.Arrow
 
 anagramCount :: String -> Int
 anagramCount s = if length s `mod` 2 /= 0 then -1 else length $ a \\ b
@@ -7,4 +8,4 @@ anagramCount s = if length s `mod` 2 /= 0 then -1 else length $ a \\ b
 
 main = do
   _ <- getLine
-  interact $ unlines . map (show . anagramCount) . lines
+  interact $ lines >>> map (show . anagramCount) >>> unlines

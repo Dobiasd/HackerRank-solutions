@@ -1,3 +1,5 @@
+import Control.Arrow
+
 solve :: Integer -> Integer
 solve cuts = x * y
   where x = cuts `div` 2
@@ -5,4 +7,4 @@ solve cuts = x * y
 
 main = do
   _ <- getLine
-  interact $ unlines . map (show . solve . read) . lines
+  interact $ lines >>> map (read >>> solve >>> show) >>> unlines

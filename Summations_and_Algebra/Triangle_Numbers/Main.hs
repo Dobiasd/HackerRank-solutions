@@ -1,16 +1,16 @@
 import Data.List
 import Data.Maybe
+import Control.Arrow
 
 (|>) x y = y x
 infixl 0 |>
 
 main = do
     _ <- getLine
-    interact $ unlines .
-               map (show . posOfFirstEvenNumInTriangleRowNFast . read) .
-               filter (not . null) .
-               lines
-
+    interact $ lines >>>
+               filter (not . null) >>>
+               map (read >>> posOfFirstEvenNumInTriangleRowNFast >>> show ) >>>
+               unlines
 
 posOfFirstEvenNumInTriangleRowNFast :: Int -> Int
 posOfFirstEvenNumInTriangleRowNFast n

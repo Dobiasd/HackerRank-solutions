@@ -1,7 +1,5 @@
 import Data.List.Split
-
-(|>) x y = y x
-infixl 0 |>
+import Control.Arrow
 
 data Point = Point Int Int
 
@@ -19,4 +17,4 @@ solve line = show res
 
 main = do
     _ <- getLine
-    interact $ unlines . map solve . lines
+    interact $ lines >>> map solve >>> unlines

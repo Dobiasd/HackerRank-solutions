@@ -1,4 +1,5 @@
 import Data.List.Split
+import Control.Arrow
 
 (|>) x y = y x
 infixl 0 |>
@@ -6,8 +7,8 @@ infixl 0 |>
 main :: IO ()
 main = do
   _ <- getLine
-  interact $ unlines . map (show . solve . map read . splitOn " ") .
-             filter (not . null) . lines
+  interact $ lines >>> filter (not . null) >>>
+             map (splitOn " " >>> map read >>> solve >>> show) >>> unlines
 
 solve :: [Int] -> Int
 solve [n, c, m] = iterate f (n, c, m, 0, 0)
