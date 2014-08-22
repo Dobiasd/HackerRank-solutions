@@ -9,4 +9,4 @@ boolAsWord True = "YES"
 boolAsWord False = "NO"
 
 solve :: String -> Bool
-solve = sort >>> group >>> map length >>> filter odd >>> length >>> (==1)
+solve = sort >>> group >>> map length >>> filter odd >>> length >>> (<2)
