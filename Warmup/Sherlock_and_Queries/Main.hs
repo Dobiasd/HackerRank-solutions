@@ -18,7 +18,7 @@ infixl 0 |>
 main :: IO ()
 main = do
     [n, m] <- getNumberLine
-    [a, b, c] <- sequence $ replicate 3 getNumberLine
+    [a, b, c] <- replicateM 3 getNumberLine
     solve n m a b c |> map show >>> unwords |> putStrLn
 
 -- http://stackoverflow.com/questions/25891631/how-to-reuse-io-lifted-function-for-different-type
