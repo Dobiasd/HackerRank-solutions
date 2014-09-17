@@ -1,10 +1,9 @@
 import Control.Arrow
-import Control.Monad
 import Data.List
 import Data.List.Split
-import Data.Maybe
 
-(|>) a b = b a
+(|>) :: a -> (a -> b) -> b
+(|>) x y = y x
 infixl 0 |>
 
 main :: IO ()
@@ -15,6 +14,7 @@ main = do
 
 solve :: [String] -> Bool
 solve [_, line] = readInts line |> gcdmany |> (==1)
+solve _ = error "list must have length 2"
 
 showBool :: Bool -> String
 showBool True = "YES"

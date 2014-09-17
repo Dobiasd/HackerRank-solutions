@@ -1,6 +1,7 @@
 import Data.List.Split
 import Control.Arrow
 
+(|>) :: a -> (a -> b) -> b
 (|>) x y = y x
 infixl 0 |>
 
@@ -39,6 +40,7 @@ boolToString False = "NO"
 solve :: [String] -> String
 solve = map strToPoint >>> pointsInPlane >>> boolToString
 
+main :: IO ()
 main = do
     _ <- getLine
     interact $ lines >>> chunksOf 4 >>> map solve >>> unlines

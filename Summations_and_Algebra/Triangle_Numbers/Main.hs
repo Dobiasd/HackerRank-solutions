@@ -2,9 +2,11 @@ import Data.List
 import Data.Maybe
 import Control.Arrow
 
+(|>) :: a -> (a -> b) -> b
 (|>) x y = y x
 infixl 0 |>
 
+main :: IO ()
 main = do
     _ <- getLine
     interact $ lines >>>

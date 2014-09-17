@@ -2,7 +2,8 @@ import Control.Arrow
 import Control.Applicative
 import Data.List.Split
 
-(|>) a b = b a
+(|>) :: a -> (a -> b) -> b
+(|>) x y = y x
 infixl 0 |>
 
 main :: IO ()

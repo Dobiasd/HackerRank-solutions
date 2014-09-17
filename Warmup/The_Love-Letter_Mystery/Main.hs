@@ -9,6 +9,7 @@ palindromeMoveCnt s = sum diffs
         f a b = abs $ ord b - ord a
         diffs = zipWith f start (reverse rest)
 
+main :: IO ()
 main = do
   _ <- getLine
   interact $ lines >>> map (palindromeMoveCnt >>> show) >>> unlines

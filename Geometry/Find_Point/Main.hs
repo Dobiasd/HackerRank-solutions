@@ -15,6 +15,7 @@ solve line = show res
           [px, py, qx, qy] = map read tokens
           res = symPoint (Point px py) (Point qx qy)
 
+main :: IO ()
 main = do
     _ <- getLine
     interact $ lines >>> map solve >>> unlines

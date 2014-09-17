@@ -23,4 +23,4 @@ biggestPossibleX a b n = maybeHead solutions
 
 maybeHead :: [a] -> Maybe a
 maybeHead []     = Nothing
-maybeHead (x:xs) = Just x
+maybeHead (x:_) = Just x

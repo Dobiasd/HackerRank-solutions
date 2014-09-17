@@ -4,12 +4,13 @@ import qualified Data.Foldable as F
 import Data.List
 import Data.List.Split
 
-(|>) a b = b a
+(|>) :: a -> (a -> b) -> b
+(|>) x y = y x
 infixl 0 |>
 
 main :: IO ()
 main = do
-    [n, m] <- readInts <$> getLine
+    _ <- getLine
     ((lines >>> map readBinary >>> solve >>> map show >>> intercalate "\n") <$>
         getContents) >>= putStrLn
 
@@ -20,8 +21,8 @@ readBinary :: String -> [Bool]
 readBinary = map charToBool
 
 charToBool :: Char -> Bool
-charToBool '0' = False
 charToBool '1' = True
+charToBool _ = False
 
 solve :: [[Bool]] -> [Int]
 solve byRow = [bestOverlap, bestCount]
@@ -36,6 +37,7 @@ ratePair (a, b) = zipWith (||) a b |> filter id |> length
 
 toPair :: [a] -> (a, a)
 toPair [a, b] = (a, b)
+toPair _ = error "list must have length 2"
 
 -- http://rosettacode.org/wiki/Combinations#Haskell
 comb :: Int -> [a] -> [[a]]

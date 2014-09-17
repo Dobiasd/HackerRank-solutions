@@ -1,5 +1,6 @@
 import Data.List
 
+(|>) :: a -> (a -> b) -> b
 (|>) x y = y x
 infixl 0 |>
 
@@ -10,6 +11,7 @@ solve str = vals |> sort |> countUnique
         vals = str |> words |> map read
         countUnique = map (\xs@(x:_) -> (x, length xs)) . group . sort
 
+main :: IO ()
 main = do
     _ <- getLine
     val2 <- getLine

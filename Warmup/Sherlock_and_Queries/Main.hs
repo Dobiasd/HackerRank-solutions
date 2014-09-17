@@ -2,6 +2,7 @@
 
 import Control.Applicative
 import Control.Arrow
+import Control.Monad
 import Control.Monad.Primitive
 import Control.Monad.ST
 import Data.Int
@@ -12,7 +13,7 @@ import qualified Data.Vector.Unboxed as Vu
 import qualified Data.Vector.Unboxed.Mutable as Vmu
 
 (|>) :: a -> (a -> b) -> b
-(|>) a b = b a
+(|>) x y = y x
 infixl 0 |>
 
 main :: IO ()

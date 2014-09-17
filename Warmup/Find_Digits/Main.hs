@@ -1,6 +1,7 @@
 import Control.Arrow
 
-(|>) a b = b a
+(|>) :: a -> (a -> b) -> b
+(|>) x y = y x
 infixl 0 |>
 
 main :: IO ()
