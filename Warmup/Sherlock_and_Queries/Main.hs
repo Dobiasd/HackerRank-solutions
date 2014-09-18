@@ -1,16 +1,16 @@
--- todo: this should be shorter and faster
-
 import Control.Applicative
 import Control.Arrow
-import Control.Monad
 import Control.Monad.Primitive
 import Control.Monad.ST
 import Data.Int
 import Data.List.Split
+import Data.Maybe
+import qualified Data.ByteString.Char8 as B
 import qualified Data.Map as M
-import qualified Data.Vector as V
-import qualified Data.Vector.Unboxed as Vu
+import qualified Data.Vector.Unboxed as V
 import qualified Data.Vector.Unboxed.Mutable as Vmu
+
+type Vec = V.Vector Int64
 
 (|>) :: a -> (a -> b) -> b
 (|>) x y = y x
@@ -18,20 +18,20 @@ infixl 0 |>
 
 main :: IO ()
 main = do
-    [n, m] <- getNumberLine
-    [a, b, c] <- replicateM 3 getNumberLine
-    solve n m a b c |> map show >>> unwords |> putStrLn
+    [n, m] <- (splitOn " " >>> map read) <$> getLine
+    inputLines <- B.split '\n' <$> B.getContents
+    let [a, b, c] = map readInts inputLines
+    solve n m a b c |> V.toList >>> map show >>> unwords |> putStrLn
 
--- http://stackoverflow.com/questions/25891631/how-to-reuse-io-lifted-function-for-different-type
-getNumberLine :: Read a => IO [a]
-getNumberLine = (splitOn " " >>> map read) <$> getLine
+readInts :: B.ByteString -> Vec
+readInts = B.split ' ' >>> mapMaybe (B.readInt >>> liftA fst) >>>
+    map fromIntegral >>> V.fromList
 
 limit :: Integral a => a -> a
 limit = (`mod` 1000000007)
 
-solve :: Int -> Int -> [Integer] -> [Integer] -> [Integer] -> [Int64]
-solve n m a b c = applyChanges changes (a |> map fromInteger |> Vu.fromList)
-        |> Vu.toList
+solve :: Int -> Int -> Vec -> Vec -> Vec -> Vec
+solve n m a b c = applyChanges changes a
     where
         changes = [(i, \x -> limit $ x * fact ) | (i, fact) <- idxsAndFactors]
         idxsAndFactors = [let ii = fromIntegral i
@@ -40,11 +40,11 @@ solve n m a b c = applyChanges changes (a |> map fromInteger |> Vu.fromList)
         factors = buildFactors m b c
 
 -- http://stackoverflow.com/questions/25872149/apply-a-list-of-changes-to-elements-of-a-mutable-vector
-applyChanges :: [(Int, Int64 -> Int64)] -> Vu.Vector Int64 -> Vu.Vector Int64
+applyChanges :: [(Int, Int64 -> Int64)] -> Vec -> Vec
 applyChanges changes v = runST $ do
-    mV <- Vu.thaw v
+    mV <- V.thaw v
     mapM_ (applyChange mV) changes
-    Vu.freeze mV
+    V.freeze mV
 
 applyChange :: (Control.Monad.Primitive.PrimMonad m, Vmu.Unbox t) =>
      Vmu.MVector (Control.Monad.Primitive.PrimState m) t
@@ -53,15 +53,13 @@ applyChange mvec (idx, f) = do
     val <- Vmu.read mvec idx
     Vmu.write mvec idx $ f val
 
-buildFactors :: Int -> [Integer] -> [Integer] -> M.Map Int64 Int64
-buildFactors m b c = emptyMap |> comp inserts
-        |> M.map fromInteger >>> M.mapKeys fromInteger
+buildFactors :: Int -> Vec -> Vec -> M.Map Int64 Int64
+buildFactors m b c = M.empty |> comp inserts
+        |> M.map fromIntegral >>> M.mapKeys fromIntegral
     where
-        emptyMap = M.empty :: M.Map Integer Integer
-        [bVec, cVec] = map V.fromList [b, c]
-        inserts = [M.insertWith multAndLimit (bVec V.! i) (cVec V.! i) |
+        inserts = [M.insertWith multAndLimit (b V.! i) (c V.! i) |
             i <- [0 .. m-1]]
-        multAndLimit x y = x * y |> limit
+            where multAndLimit x y = x * y |> limit
 
 -- http://stackoverflow.com/questions/19777555/most-idiomatic-implementation-of-a-a-a-a
 comp :: [b -> b] -> b -> b
