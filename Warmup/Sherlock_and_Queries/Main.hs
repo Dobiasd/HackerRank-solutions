@@ -23,6 +23,7 @@ main = do
     let [a, b, c] = map readInts inputLines
     solve n m a b c |> V.toList >>> map show >>> unwords |> putStrLn
 
+-- http://stackoverflow.com/questions/25913481/read-numbers-from-stdin-into-a-data-vector-unboxed-vector-int64
 readInts :: B.ByteString -> Vec
 readInts = B.split ' ' >>> mapMaybe (B.readInt >>> liftA fst) >>>
     map fromIntegral >>> V.fromList
