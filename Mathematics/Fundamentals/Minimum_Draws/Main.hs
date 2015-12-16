@@ -1,2 +1,7 @@
 import Control.Arrow
-main = interact $ lines >>> tail >>> map (read >>> (+1) >>> show) >>> unlines
+
+main :: IO ()
+main = interact $ lines >>> tail >>> map (read >>> solve >>> show) >>> unlines
+
+solve :: Integer -> Integer
+solve = (+1)

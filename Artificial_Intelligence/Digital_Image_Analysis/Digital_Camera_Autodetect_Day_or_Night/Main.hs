@@ -1,6 +1,7 @@
 import Control.Arrow
 import Data.List
 
+main :: IO ()
 main = interact solve
 
 type Value = Float
@@ -10,6 +11,7 @@ type ImageRow a = [a]
 data Image2d pixelType = Image2d [ImageRow pixelType]
 data Position = Position Int Int
 
+(|>) :: x -> (x -> y) -> y
 (|>) x y = y x
 infixl 0 |>
 
@@ -38,6 +40,7 @@ instance PixelType RGB where
     black = RGB 0 0 0
     white = RGB 255 255 255
     listToColor [r, g, b] = RGB r g b
+    listToColor _ = error "invalid RGB list"
 
 instance PixelType Gray where
     divide (Gray v) x = Gray (v/x)
@@ -46,6 +49,7 @@ instance PixelType Gray where
     black = Gray 0
     white = Gray 255
     listToColor [v] = Gray v
+    listToColor _ = error "invalid Gray list"
 
 class PixelType pixelType => Image pixelType where
     pixelSum :: Image2d pixelType -> pixelType
